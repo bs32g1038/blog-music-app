@@ -1,0 +1,28 @@
+language: node_js
+
+node_js:
+  - "10.16.0"
+
+cache:
+  directories:
+    - $HOME/.npm-cache
+    - $HOME/.npm-prefix
+    - $HOME/.npm
+
+jobs:
+  include:
+    - stage: test
+      if: tag IS blank
+      install:
+        - set -e
+        - npm install
+      script:
+        - set -e
+        - CI=false npm run build
+    - stage: release-docker-image
+      if: tag IS present
+      provider: script
+      script: bash scripts/release-docker-image.sh
+      on:
+        tags: true
+        branch: master
