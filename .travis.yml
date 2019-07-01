@@ -3,6 +3,9 @@ language: node_js
 node_js:
   - "10.16.0"
 
+services:
+  - docker
+
 cache:
   directories:
     - $HOME/.npm-cache
@@ -21,7 +24,7 @@ jobs:
         - CI=false npm run build
     - stage: release-docker-image
       if: tag IS present
-      provider: script
+      install: true
       script: bash scripts/release-docker-image.sh
       on:
         tags: true
