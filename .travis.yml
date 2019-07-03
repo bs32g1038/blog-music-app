@@ -15,7 +15,7 @@ cache:
 jobs:
   include:
     - stage: test
-      if: tag IS blank
+      if: NOT branch = master
       install:
         - set -e
         - npm install
@@ -23,9 +23,7 @@ jobs:
         - set -e
         - CI=false npm run build
     - stage: release-docker-image
-      if: tag IS present
+      if: branch = master
       install: true
+      provider: script
       script: bash scripts/release-docker-image.sh
-      on:
-        tags: true
-        branch: master
